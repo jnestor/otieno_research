@@ -3,10 +3,15 @@ module pd_to_bpm(
     output logic [7:0] bpm
 );
 
+
+    // note every value with period < ?? will not fit in 8 bits!
     always_comb begin
         int i;
         for (i=0; i<=255; i++) begin
-            if (i == pd) bpm =int'( 6000.0/(float'i) );
+            if (i == pd) begin
+                if (i <= 23) bpm = 255;
+                else bpm = int'( 6000.0/i );
+            end
         end
     end
 
