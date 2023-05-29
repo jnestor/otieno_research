@@ -28,7 +28,7 @@ module reaction_FSM(
 
      typedef enum logic [2:0] {
          IDLE = 3'b000, RWAIT = 3'b001, WHITE = 3'b010, RED = 3'b011, 
-          YELLOW = 3'b100, GREEN = 3'b101, DISPLAY = 3'b110
+          YELLOW = 3'b100, DISPLAY = 3'b101
       } states_t ;
       
    states_t state, next;
@@ -36,27 +36,21 @@ module reaction_FSM(
         
      always_ff @(posedge clk)
                begin  
-                 if (rst) state <= GREEN;
+                  if (rst) state <= IDLE;
                  else state <= next;
                 end
          
          
       always_comb 
          begin 
-           next = GREEN;
+           next = IDLE;
            unique  case(state)
               IDLE: begin
                        color_r = 0; color_g =2; color_b =0; time_clr = 1; 
                        start_rwait =0; start_wait5 = 0;rs_en = 0; time_en =0;
                        if (start) next = RWAIT; 
                        else next = IDLE;    
-                     end
-             GREEN: begin
-                       color_r = 0; color_g =2; color_b =0;time_clr = 1; 
-                       start_rwait =0; time_en = 0; start_wait5 = 0; rs_en = 0;
-                       if (start)  next = RWAIT;
-                        else next = GREEN;
-                     end
+                     end          
             RWAIT: begin 
                        color_r = 0; color_g =0; color_b =0; time_clr = 1;
                        start_rwait =1;time_en = 0;start_wait5 = 0; rs_en = 0;
