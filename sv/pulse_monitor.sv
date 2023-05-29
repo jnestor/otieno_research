@@ -18,7 +18,7 @@ module pulse_monitor (input logic clk, rst, pulse_in,
 		      output logic [3:0] d2, d1, d0);
 
    logic [5:0] 				count, count1, count2, count3, count4;
-   logic [7:0] 				bpm;
+	logic [7:0] 				bpm; // changed from countsum to bpm
    logic [7:0]              pulseavg;
    logic                    pulse_db, pulse_sp, cy; // added internal wire cy connected to the carry output of bcd counter
   
