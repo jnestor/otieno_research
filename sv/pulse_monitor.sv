@@ -21,8 +21,6 @@ module pulse_monitor (input logic clk, rst, pulse_in,
    logic [7:0] 				bpm;
    logic [7:0]              pulseavg;
    logic                    pulse_db, pulse_sp, cy; // added internal wire cy connected to the carry output of bcd counter
-
-   //delay_counter U_TIMER (.clk, .rst, .delay_start(1'b0), .pulse_sp);  // periodic 5 second delay
   
    debounce U_PDB(.clk, .pb(pulse_in), .pb_debounced(pulse_db));
    
