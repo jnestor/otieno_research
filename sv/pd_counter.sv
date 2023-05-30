@@ -9,6 +9,7 @@
 //-----------------------------------------------------------------------------
 // Description :
 // This module counts the interval between rising edges on the pulse signal
+// saturating at 255
 //
 //-----------------------------------------------------------------------------
 
@@ -18,6 +19,6 @@ module pd_counter (input logic clk, rst, enb, clr,
 
    always_ff @(posedge clk)
      if (rst || clr) q <= 0;
-     else if (q != 8'b11111111) q <= q + 1;
+     else if (enb && (q != 8'b11111111)) q <= q + 1;
    
 endmodule // pulsecounter

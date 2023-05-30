@@ -14,10 +14,16 @@
 
 
 module avg_4( 
-input logic [5:0] count1, count2, count3, count4,
+input logic [7:0] count1, count2, count3, count4,
 output logic [7:0] pulseavg
     );
-    assign pulseavg = (count1 + count2 + count3 + count4) >>2;
+    
+    logic [9:0] sum;
+    
+    assign sum = count1 + count2 + count3 + count4;
+    
+    assign pulseavg = sum >> 2;
+    
 endmodule
 
 

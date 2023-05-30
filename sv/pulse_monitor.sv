@@ -14,15 +14,18 @@
 // NOTE: his module needs to be modified to match the structure of the period-based
 // pulse monitor - see the diagram in the doc folder.
 
-module pulse_monitor (input logic clk, rst, pulse_in,
-		      output logic [3:0] d2, d1, d0,
-		      output logic pulse_led);
+module pulse_monitor (
+    input logic clk, rst, pulse_in,
+	output logic [3:0] d2, d1, d0,
+	output logic pulse_led
+);
 
-   logic [5:0] count, count1, count2, count3, count4;
+   logic [7:0] count, count1, count2, count3, count4;
    logic [7:0] bpm;                                                    // changed from countsum to bpm
    logic [7:0] pulseavg;
    logic pulse_db, pulse_sp, cy;                                        // added internal wire cy connected to the carry output of bcd counter
-   assign  pulse_led = pulse_sp;                                            //internal wire to connect pulse to the single pulser
+   assign  pulse_led = pulse_in;                                            //internal wire to connect pulse to the single pulser
+   logic [3:0] q_nc;  // dont use output of BCD counter (only carry)
    
    debounce U_PDB(.clk,.pb(pulse_in), .pb_debounced(pulse_db));
    
@@ -35,7 +38,7 @@ module pulse_monitor (input logic clk, rst, pulse_in,
    reg_enb U_REG3 (.clk, .rst, .enb(pulse_sp), .d(count2), .q(count3));
    reg_enb U_REG4 (.clk, .rst, .enb(pulse_sp), .d(count3), .q(count4));
   
-   bcd_counter U_BCDCOUNTER(.enb(1'b1),.carry(cy),.clk,.rst);
+   counter_bcd U_BCDCOUNTER(.clk, .rst, .enb(1'b1), .q(q_nc), .carry(cy));
   
    avg_4 U_AVERAGE(.count1, .count2, .count3,.count4, .pulseavg);         // adds the four registered counts and computes the average
   

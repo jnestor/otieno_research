@@ -1,5 +1,5 @@
 module sevenseg_hex (input logic [3:0] a,
-		 output logic [6:0] segs_l );
+		 output logic [6:0] segs_n );
 
    logic [6:0] 			    segs;  // active high
    
@@ -23,7 +23,7 @@ module sevenseg_hex (input logic [3:0] a,
        4'hf : segs = 7'b100_0111;
    endcase // unique case (d)
 
-   assign segs_l = ~segs;  // convert to active low
+   assign segs_n = ~segs;  // convert to active low
 
 endmodule // sevenseg
 

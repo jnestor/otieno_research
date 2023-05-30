@@ -5,9 +5,9 @@
 module sevenseg_control( input logic clk, rst,
 			    input logic [3:0]  d7, d6, d5, d4, d3, d2, d1, d0,
 			    input logic [7:0] blank, dpmask,
-			    output logic [7:0] anode_l,
-			    output logic [6:0] segs_l,
-			    output logic dp_l );
+			    output logic [7:0] anode_n,
+			    output logic [6:0] segs_n,
+			    output logic dp_n );
 
    logic [2:0] 			       count;
    logic [3:0] 			       dsel;
@@ -17,15 +17,15 @@ module sevenseg_control( input logic clk, rst,
      if (rst) count <= 0;
      else count <= count + 1;
      
-     assign dp_l = !((dpmask[count]==1'b1) && (blank[count]==1'b0));
+     assign dp_n = !((dpmask[count]==1'b1) && (blank[count]==1'b0));
 
    //3-8 decoder
    always_comb
       begin
-        anode_l = '1;  // default va\lue not really needed here
+        anode_n = '1;  // default va\lue not really needed here
 	    for (int i=0; i<=7; i=i+1)
-	       if ((count == i) && (blank[i] == 1'b0)) anode_l[i] = 1'b0;
-	       else anode_l[i] = 1'b1;
+	       if ((count == i) && (blank[i] == 1'b0)) anode_n[i] = 1'b0;
+	       else anode_n[i] = 1'b1;
        end
 
    //multiplexer
@@ -43,6 +43,6 @@ module sevenseg_control( input logic clk, rst,
      endcase // case (count)
 
    // seven-seg decoder
-   sevenseg_hex U_SEVENSEG(.a(dsel), .segs_l);
+   sevenseg_hex U_SEVENSEG(.a(dsel), .segs_n);
   
 endmodule // sevenseg_control
