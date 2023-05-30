@@ -22,11 +22,12 @@ module lab10_top(
     output logic dp_l               //  displaydecimal point
     );
     
-    logic [3:0] pd2, pd1, pd0,       //internal wires from  pulse monitor to the seven segment display
+    logic [3:0] pd2, pd1, pd0;      //internal wires from  pulse monitor to the seven segment display
     logic [3:0] rd3, rd2, rd1, rd0;  // internal wires from reaction timer to the seven segment display
     logic sclk;                      // the divided clock signal
     logic  pulse_in;                 // pulse from the pulse sensor
-    assign pulse = pulse_in;         //internal wire to connect pulse to the single pulser
+   
+    
     
                                      // add clock divider and other modules here
     pulse_sensor    U_PS(.clk, .rst, .analog_pos_in, .analog_neg_in, .led, .pulse(pulse_in));
