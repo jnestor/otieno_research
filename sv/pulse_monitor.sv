@@ -17,16 +17,16 @@
 module pulse_monitor (input logic clk, rst, pulse_in,
 		      output logic [3:0] d2, d1, d0);
 
-   logic [5:0] 				count, count1, count2, count3, count4;
-	logic [7:0] 				bpm; // changed from countsum to bpm
-   logic [7:0]              pulseavg;
-   logic                    pulse_db, pulse_sp, cy; // added internal wire cy connected to the carry output of bcd counter
+   logic [5:0] count, count1, count2, count3, count4;
+   logic [7:0] bpm;                                                    // changed from countsum to bpm
+   logic [7:0] pulseavg;
+   logic pulse_db, pulse_sp, cy;                                        // added internal wire cy connected to the carry output of bcd counter
   
-   debounce U_PDB(.clk, .pb(pulse_in), .pb_debounced(pulse_db));
+   debounce U_PDB(.clk, .rst,.pb(pulse_in), .pb_debounced(pulse_db));
    
-   single_pulser U_PULSE (.clk, .din(pulse_db), .d_pulse(pulse_sp)); // delivers a single pulse to clear the saturating pulse counter
+   single_pulser U_PULSE (.clk, .din(pulse_db), .d_pulse(pulse_sp));     // delivers a single pulse to clear the saturating pulse counter
    
-   pd_counter U_COUNT (.clk, .rst, .clr(pulse_sp), .enb(cy), .q(count)); // an instance of the saturating pulse counter for the pulse monitor
+   pd_counter U_COUNT (.clk,.clr(pulse_sp), .enb(cy), .q(count));        // an instance of the saturating pulse counter for the pulse monitor
   
    reg_enb U_REG1 (.clk, .rst, .enb(pulse_sp), .d(count), .q(count1));
    reg_enb U_REG2 (.clk, .rst, .enb(pulse_sp), .d(count1), .q(count2));
@@ -35,7 +35,7 @@ module pulse_monitor (input logic clk, rst, pulse_in,
   
    bcd_counter U_BCDCOUNTER(.enb(1'b1),.carry(cy),.clk,.rst);
   
-   avg_4 U_AVERAGE(.count1, .count2, .count3,.count4, .pulseavg); // adds the four registered counts and computes the average
+   avg_4 U_AVERAGE(.count1, .count2, .count3,.count4, .pulseavg);         // adds the four registered counts and computes the average
   
    pd_to_bpm U_PD_TO_BPM (.pd(pulseavg), .bpm(bpm));
   
