@@ -25,15 +25,15 @@ module lab10_top(
     logic [3:0] pd2, pd1, pd0,       //internal wires from  pulse monitor to the seven segment display
     logic [3:0] rd3, rd2, rd1, rd0;  // internal wires from reaction timer to the seven segment display
     logic sclk;                      // the divided clock signal
-    logic  pulse_in;                 // pulse from the pulse sensor
-    assign pulse = pulse_in;         //internal wire to connect pulse to the single pulser
+    logic  pulse_in, pulse_led;                 // pulse from the pulse sensor
+    assign pulse = pulse_led;         //internal wire to connect pulse to the single pulser
     
                                      // add clock divider and other modules here
     pulse_sensor    U_PS(.clk, .rst, .analog_pos_in, .analog_neg_in, .led, .pulse(pulse_in));
 
     clkdiv          U_CLOCKDIVIDER(.clk,.sclk,.reset(1'b0));
 
-    pulse_monitor   U_PULSEMONITOR(.pulse_in,.d0(pd0),.d1(pd1),.d2(pd2),.clk(sclk),.rst,.pulse_led(pulse));
+    pulse_monitor   U_PULSEMONITOR(.pulse_in,.d0(pd0),.d1(pd1),.d2(pd2),.clk(sclk),.rst,.pulse_led);
 
     display_control U_DISPLAYCONTROLLER(.clk(sclk),.rst,.pd2, .pd1, .pd0, .rd3, .rd2, .rd1, .rd0,.segs_l,.anode_l,.dp_l,.mode);
     
